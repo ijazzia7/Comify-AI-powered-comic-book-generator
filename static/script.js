@@ -87,6 +87,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 cryptocurrencies = data;
                 filteredCryptos = [...cryptocurrencies];
                 renderCryptoList();
+                if (filteredCryptos.length > 0) {
+                    showCryptoDetail(filteredCryptos[0]);
+                }
             })
             .catch(error => {
                 console.error('Error fetching cryptocurrencies:', error);
