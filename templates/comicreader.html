@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Comic Reader</title>
+    <link rel="stylesheet" href="static/style.css" />
+    <script
+      type="text/javascript"
+      src="https://code.jquery.com/jquery-3.5.1.min.js"
+    ></script>
+    <script type="text/javascript" src="static/turn.js"></script>
+
+    <style>
+        body {
+          background: hsl(var(--background));
+          color: hsl(var(--foreground));
+          font-family: var(--font-comic);
+          margin: 0;
+          overflow-x: hidden;
+        }
+  
+        .header {
+          position: sticky;
+          top: 0;
+          z-index: 50;
+          backdrop-filter: blur(6px);
+          background: hsl(var(--background) / 0.95);
+          border-bottom: 1px solid hsl(var(--border));
+          padding: 16px 24px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+  
+        .header h1 {
+          font-size: 1.3rem;
+          font-weight: bold;
+        }
+  
+        .header-controls {
+          display: flex;
+          gap: 8px;
+          align-items: center;
+        }
+  
+        .btn-back{
+            border: 1px solid hsl(var(--border));
+            background: hsl(var(--muted));
+            color: hsl(var(--foreground));
+            border-radius: var(--radius);
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: 0.2s;
+        }
+        .btn {
+          border: 1px solid hsl(var(--border));
+          background: hsl(var(--muted));
+          color: hsl(var(--foreground));
+          border-radius: var(--radius);
+          padding: 0px 15px;
+          cursor: pointer;
+          font-size: 2.0rem;
+          transition: 0.2s;
+        }
+        .btn:hover {
+          background: hsl(var(--muted-foreground) / 0.2);
+        }
+        .btn:disabled {
+          opacity: 0.4;
+          cursor: not-allowed;
+        }
+  
+        #flipbook-container {
+          width: 95%;
+          max-width: 1000px;
+          margin: 40px auto;
+          perspective: 2500px;
+        }
+  
+        #flipbook {
+          width: 100%;
+          height: 650px;
+          margin: auto;
+        }
+  
+        .page {
+          background: hsl(var(--comic-panel));
+          border: 1px solid hsl(var(--comic-panel-border));
+          border-radius: var(--radius);
+          overflow: hidden;
+          box-shadow: var(--panel-shadow);
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: center;
+          padding: 16px;
+          font-size: 0.9rem;
+          color: hsl(var(--foreground));
+        }
+  
+        .page h2 {
+          margin: 0 0 12px;
+          font-size: 1.2rem;
+          text-align: center;
+          color: hsl(var(--primary));
+        }
+  
+        .panel {
+          width: 95%;
+          margin-bottom: 16px;
+          border: 1px solid hsl(var(--border));
+          border-radius: 0.5rem;
+          padding: 8px;
+          background: hsl(var(--muted));
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+  
+        .panel img {
+          max-width: 100%;
+          height: auto;
+          border-radius: 0.5rem;
+          margin-bottom: 8px;
+        }
+  
+        .zoom-controls {
+          text-align: center;
+          margin: 20px;
+        }
+        #magazine {
+            margin: auto;
+            margin-top: 60px;
+            
+        }
+        #magazine .turn-page {
+          background-color: #ccc;
+          background-size: 100% 100%;
+        }
+        .page-tips {
+            margin-top: 2rem;    
+            text-align: center;   
+            font-size: 0.875rem;    
+            color: #888888;       
+            line-height: 1.5;    
+          }
+          
+        .page-counter {
+        font-size: 14px;
+        color: #666;   /* muted gray */
+        text-align: center;
+        margin: 8px 0;
+        }
+        .titleandpg{
+            display: block;
+            gap: 2px;
+
+        }
+
+
+
+      </style>
+  </head>
+  <body>
+    <body>
+        <div class="header">
+          <button class="btn-back" onclick="window.location.href='comiclibrary.html'">
+            ⬅ Back
+          </button>
+        <div class='titleandpg'>
+            <h1 id="comicTitle">Demo Comic</h1>
+            <p id="pageCounter" class="page-counter"></p>
+        </div>
+          <div class="header-controls">
+            <button class="btn" onclick="zoomOut()">-</button>
+            <span id="zoomDisplay">100%</span>
+            <button class="btn" onclick="zoomIn()">+</button>
+            <button class="btn" onclick="toggleFullscreen()">⛶</button>
+          </div>
+        </div>
+
+        <div id="magazine">
+        <div style="background-image: url(static/pages/01.jpg)"></div>
+        <div style="background-image: url(static/pages/02.jpg)"></div>
+        <div style="background-image: url(static/pages/03.jpg)"></div>
+        <div style="background-image: url(static/pages/04.jpg)"></div>
+        <div style="background-image: url(static/pages/05.jpg)"></div>
+        <div style="background-image: url(static/pages/06.jpg)"></div>
+        </div>
+
+    <div class="zoom-controls">
+        <button class="btn-back" onclick="prevPage()">Previous</button>
+        <button class="btn-back" onclick="nextPage()">Next</button>
+    </div>
+    
+    <div class="page-tips">
+        <p>💡 Use arrow keys to navigate • Click page sides to turn pages • Press ESC to exit fullscreen</p>
+    </div>
+
+    <script type="text/javascript">
+        let currentPage = 1;      // variable for current page
+      const totalPages = 10;    // variable for total pages
+        const flipbook = $("#magazine");
+
+      $(window).ready(function () {
+        flipbook.turn({
+          display: "double",
+          width: 800,
+          height: 620,
+          acceleration: true,
+          gradients: !$.isTouch,
+          autoCenter: true,
+          duration: 600,
+          elevation: 50,
+          when: {
+            turned: function (e, page) {
+              /*console.log('Current view: ', $(this).turn('view'));*/
+            },
+          },
+        });
+      });
+
+      $(window).bind("keydown", function (e) {
+        if (e.keyCode == 37) flipbook.turn("previous");
+        else if (e.keyCode == 39) flipbook.turn("next");
+      });
+
+      let zoom = 1;
+      function zoomIn() {
+        zoom = Math.min(zoom + 0.2, 3);
+        flipbook.css("transform", `scale(${zoom})`);
+        $("#zoomDisplay").text(`${Math.round(zoom * 100)}%`);
+      }
+      function zoomOut() {
+        zoom = Math.max(zoom - 0.2, 0.5);
+        flipbook.css("transform", `scale(${zoom})`);
+        $("#zoomDisplay").text(`${Math.round(zoom * 100)}%`);
+      }
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement)
+          document.documentElement.requestFullscreen();
+        else document.exitFullscreen();
+      }
+
+      function nextPage() {
+        flipbook.turn("next");
+        currentPage++;
+        updatePageCounter();
+      }
+      function prevPage() {
+        flipbook.turn("previous");
+        currentPage--;
+        updatePageCounter();
+      }
+      
+    
+      function updatePageCounter() {
+        document.getElementById("pageCounter").textContent = 
+          `Page ${currentPage} of ${totalPages}`;
+      }
+
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight") nextPage();
+        if (e.key === "ArrowLeft") prevPage();
+        if (e.key === "Escape") document.exitFullscreen();
+      });
+    </script>
+  </body>
+</html>

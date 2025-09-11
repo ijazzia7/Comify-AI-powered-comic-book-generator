@@ -3,87 +3,180 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Crypto Tracker</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
+    <title>AI Comic Genesis - AI-Powered Comic Book Generator</title>
+    <meta
+      name="description"
+      content="Create stunning comic books with AI. Transform your imagination into beautiful comics with our advanced AI-powered generator and immersive reading experience."
     />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    <meta name="author" content="Lovable" />
+
+    <!-- Open Graph Meta -->
+    <meta property="og:title" content="06c512a5-1693-46c7-ae8b-25c882e076fb" />
+    <meta property="og:description" content="Lovable Generated Project" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:image"
+      content="https://lovable.dev/opengraph-image-p98pqg.png"
     />
+
+    <!-- Twitter Meta -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@lovable_dev" />
+    <meta
+      name="twitter:image"
+      content="https://lovable.dev/opengraph-image-p98pqg.png"
+    />
+
+    <!-- Link to external CSS -->
+    <link rel="stylesheet" href="static/style.css" />
   </head>
-  <body class="light-mode">
-    <div class="container">
-      <header>
-        <h1><i class="fas fa-coins"></i> Crypto Tracker</h1>
-        <div class="controls">
-          <div class="search-container">
-            <input
-              type="text"
-              id="searchInput"
-              placeholder="Search cryptocurrencies..."
-            />
-            <i class="fas fa-search"></i>
-          </div>
-          <button id="themeToggle" class="theme-toggle">
-            <i class="fas fa-moon"></i>
+
+  <body>
+    <!-- App content will go here once we extract from React components -->
+
+    <section class="hero">
+      <!-- Background -->
+      <div class="hero-background"></div>
+
+      <!-- Content -->
+      <div class="hero-content">
+        <!-- Floating Icon -->
+        <div class="hero-icon">
+          <!-- Sparkles SVG -->
+
+          <img src="static/images/bookbg.png" alt="Comic Page 1" />
+        </div>
+
+        <!-- Title -->
+        <h1 class="hero-title">
+          <span class="block text-foreground">AI-Powered</span>
+          <span class="block hero-gradient-text">Comic Genesis</span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="hero-subtitle">
+          Transform your imagination into stunning comic books with cutting-edge
+          AI. Create, customize, and immerse yourself in unlimited storytelling
+          possibilities.
+        </p>
+
+        <!-- Action Buttons -->
+        <div class="hero-buttons">
+          <button
+            onclick="window.location.href='/comicgenerator'"
+            id="startBtn"
+            class="btn btn-primary"
+          >
+            <!-- Zap SVG -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="icon"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              />
+            </svg>
+            Start Creating
+          </button>
+
+          <button id="libraryBtn" class="btn btn-glow">
+            <!-- BookOpen SVG -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="icon"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 20H5a2 2 0 01-2-2V6a2 2 0 012-2h7v16zm0 0h7a2 2 0 002-2V6a2 2 0 00-2-2h-7v16z"
+              />
+            </svg>
+            View Library
           </button>
         </div>
-      </header>
 
-      <main>
-        <div class="crypto-list-container">
-          <div class="list-header">
-            <h2>Top Cryptocurrencies</h2>
-            <div class="filter-container">
-              <select id="filterSelect">
-                <option value="all">All</option>
-                <option value="gainers">Gainers</option>
-                <option value="losers">Losers</option>
-              </select>
-            </div>
+        <!-- Features -->
+        <div class="hero-features">
+          <div class="feature-card">
+            <svg
+              class="icon text-primary"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              />
+            </svg>
+            <h3>AI-Generated Art</h3>
+            <p>
+              Create stunning comic panels with advanced AI that understands
+              your vision
+            </p>
           </div>
-          <div class="crypto-list" id="cryptoList">
-            <!-- Crypto list will be populated by JavaScript -->
-            <div class="loading">Loading cryptocurrencies...</div>
+
+          <div class="feature-card">
+            <svg
+              class="icon text-primary"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 20H5a2 2 0 01-2-2V6a2 2 0 012-2h7v16zm0 0h7a2 2 0 002-2V6a2 2 0 00-2-2h-7v16z"
+              />
+            </svg>
+            <h3>Immersive Reader</h3>
+            <p>
+              Experience your comics with our beautiful, responsive reading
+              interface
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <svg
+              class="icon text-primary"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M6.05 17.95l-1.414 1.414m0-13.657l1.414 1.414M17.95 17.95l1.414 1.414"
+              />
+            </svg>
+            <h3>Unlimited Stories</h3>
+            <p>
+              Generate infinite comic book possibilities with customizable
+              characters and plots
+            </p>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div class="crypto-detail" id="cryptoDetail">
-          <div class="detail-header">
-            <h2 id="detailCoinName">Select a coin to view details</h2>
-            <button id="closeDetail" class="close-btn">
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
-          <div class="detail-content">
-            <div class="coin-info">
-              <img id="detailCoinImage" src="" alt="" />
-              <div class="coin-stats">
-                <div class="stat">
-                  <span class="label">Price:</span>
-                  <span class="value" id="detailCoinPrice"></span>
-                </div>
-                <div class="stat">
-                  <span class="label">24h Change:</span>
-                  <span class="value" id="detailCoinChange"></span>
-                </div>
-                <div class="stat">
-                  <span class="label">Market Cap:</span>
-                  <span class="value" id="detailCoinMarketCap"></span>
-                </div>
-              </div>
-            </div>
-            <div class="chart-container">
-              <canvas id="priceChart"></canvas>
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <!-- External JS -->
+    <script src="script.js"></script>
   </body>
 </html>

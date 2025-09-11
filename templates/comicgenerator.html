@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Your Comic</title>
+    <link rel="stylesheet" href="static/style.css" />
+    <style>
+      .bg-background {
+        background: url("static/images/covr2.png");
+      }
+      .container {
+        max-width: 1100px;
+        margin: auto;
+        padding: 40px 20px;
+        display: table;
+      }
+
+      .header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 30px;
+      }
+
+      .back-btn {
+        background: none;
+        border: none;
+        color: hsl(var(--primary));
+        cursor: pointer;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .card {
+        background: var(--card-gradient);
+        border: 1px solid hsl(var(--border));
+        border-radius: var(--radius);
+        padding: 30px;
+        box-shadow: var(--panel-shadow);
+        width: 600px;
+      }
+
+      /* ====== TAB SWITCHER ====== */
+      .tab-switcher {
+        display: flex;
+        border-bottom: 1px solid hsl(var(--border));
+        margin-bottom: 20px;
+      }
+      .tab-btn {
+        flex: 1;
+        padding: 12px;
+        text-align: center;
+        cursor: pointer;
+        border: none;
+        background: hsl(var(--muted));
+        color: hsl(var(--muted-foreground));
+        font-weight: 600;
+      }
+      .tab-btn.active {
+        background: hsl(var(--primary));
+        color: hsl(var(--primary-foreground));
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      label {
+        display: block;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 6px;
+        color: hsl(var(--foreground));
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        border: 1px solid hsl(var(--border));
+        border-radius: var(--radius);
+        padding: 10px;
+        font-size: 1rem;
+        background: hsl(var(--muted));
+        color: hsl(var(--foreground));
+      }
+      textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      .field {
+        margin-bottom: 20px;
+      }
+
+      .styles-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .style-btn {
+        padding: 10px;
+        border: 1px solid hsl(var(--border));
+        border-radius: var(--radius);
+        cursor: pointer;
+        background: hsl(var(--muted));
+        color: hsl(var(--foreground));
+        text-align: center;
+      }
+      .style-btn.active {
+        background: hsl(var(--primary));
+        color: hsl(var(--primary-foreground));
+        border-color: hsl(var(--ring));
+        box-shadow: 0 0 8px hsl(var(--primary-glow));
+      }
+
+      .preview {
+        background: hsl(var(--muted) / 0.5);
+        border: 1px solid hsl(var(--border));
+        border-radius: var(--radius);
+        padding: 20px;
+      }
+      .preview h3 {
+        margin-bottom: 12px;
+        font-size: 1.1rem;
+        color: hsl(var(--foreground));
+      }
+      .preview p {
+        font-size: 0.9rem;
+        margin-bottom: 6px;
+        color: hsl(var(--muted-foreground));
+      }
+
+      .generate-btn {
+        width: 100%;
+        padding: 16px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        border: none;
+        border-radius: var(--radius);
+        background: hsl(var(--accent));
+        color: hsl(var(--accent-foreground));
+        cursor: pointer;
+        transition: 0.2s ease;
+      }
+      .generate-btn:hover {
+        box-shadow: 0 0 12px hsl(var(--accent) / 0.6);
+      }
+      .generate-btn:disabled {
+        background: #555;
+        cursor: not-allowed;
+      }
+
+      .loading {
+        text-align: center;
+        font-size: 0.9rem;
+        color: hsl(var(--muted-foreground));
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body class="bg-background text-foreground">
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <button class="back-btn" onclick="window.location.href='/'">
+          ⬅ Back
+        </button>
+        <h1 class="text-4xl font-bold">Create Your Comic</h1>
+      </div>
+
+      <!-- Card -->
+      <div class="card">
+        <!-- Tab Switcher -->
+        <div class="tab-switcher">
+          <button id="tabFreeform" class="tab-btn active">
+            ✨ Story Starter
+          </button>
+          <button id="tabGuided" class="tab-btn">🎨 Story Builder</button>
+        </div>
+
+        <!-- Freeform Mode -->
+        <div id="freeformSection">
+          <div class="field">
+            <label>Story Idea</label>
+            <textarea
+              id="freeformStory"
+              placeholder="Type anything... e.g. 'Aliens open a taco truck' or 'A raccoon steals a sandwich'"
+            ></textarea>
+          </div>
+          <button id="surpriseBtn" class="style-btn">🎲 Surprise Me</button>
+
+          <div class="preview">
+            <h3>Generation Preview</h3>
+            <p>
+              <strong>Idea:</strong>
+              <span id="previewFreeform">No idea yet</span>
+            </p>
+            <p>
+              <strong>Estimated Length:</strong>
+              <span id="previewFreeformLength">~0 pages</span>
+            </p>
+          </div>
+
+          <button id="generateFreeform" class="generate-btn">
+            ⚡ Generate Comic
+          </button>
+          <div id="loadingFreeform" class="loading" style="display: none">
+            AI is creating your comic... Please wait!
+          </div>
+        </div>
+
+        <!-- Guided Mode -->
+        <div id="guidedSection" class="hidden">
+          <div class="grid">
+            <div>
+              <div class="field">
+                <label>Comic Title</label>
+                <input
+                  type="text"
+                  id="comicTitle"
+                  placeholder="Enter your comic title..."
+                />
+              </div>
+              <div class="field">
+                <label>Story & Plot</label>
+                <textarea
+                  id="comicStory"
+                  placeholder="Describe your story and plot..."
+                ></textarea>
+              </div>
+              <div class="field">
+                <label>Characters (Optional)</label>
+                <input
+                  type="text"
+                  id="comicChars"
+                  placeholder="Describe your main characters..."
+                />
+              </div>
+              <div class="field">
+                <label>Art Style</label>
+                <div class="styles-grid">
+                  <button
+                    type="button"
+                    class="style-btn active"
+                    onclick="setStyle(this,'superhero')"
+                  >
+                    superhero
+                  </button>
+                  <button
+                    type="button"
+                    class="style-btn"
+                    onclick="setStyle(this,'manga')"
+                  >
+                    manga
+                  </button>
+                  <button
+                    type="button"
+                    class="style-btn"
+                    onclick="setStyle(this,'cartoon')"
+                  >
+                    cartoon
+                  </button>
+                  <button
+                    type="button"
+                    class="style-btn"
+                    onclick="setStyle(this,'realistic')"
+                  >
+                    realistic
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="preview">
+                <h3>Generation Preview</h3>
+                <p>
+                  <strong>Title:</strong>
+                  <span id="previewTitle">Untitled Comic</span>
+                </p>
+                <p>
+                  <strong>Style:</strong>
+                  <span id="previewStyle">superhero</span>
+                </p>
+                <p>
+                  <strong>Story Length:</strong>
+                  <span id="previewLength">~0 pages</span>
+                </p>
+              </div>
+              <button id="generateGuided" class="generate-btn">
+                ⚡ Generate Comic
+              </button>
+              <div id="loadingGuided" class="loading" style="display: none">
+                AI is creating your comic... Please wait!
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const tabFreeform = document.getElementById("tabFreeform");
+      const tabGuided = document.getElementById("tabGuided");
+      const freeformSection = document.getElementById("freeformSection");
+      const guidedSection = document.getElementById("guidedSection");
+
+      tabFreeform.addEventListener("click", () => {
+        tabFreeform.classList.add("active");
+        tabGuided.classList.remove("active");
+        freeformSection.classList.remove("hidden");
+        guidedSection.classList.add("hidden");
+      });
+      tabGuided.addEventListener("click", () => {
+        tabGuided.classList.add("active");
+        tabFreeform.classList.remove("active");
+        guidedSection.classList.remove("hidden");
+        freeformSection.classList.add("hidden");
+      });
+
+      // Freeform logic
+      const freeformStory = document.getElementById("freeformStory");
+      const previewFreeform = document.getElementById("previewFreeform");
+      const previewFreeformLength = document.getElementById(
+        "previewFreeformLength"
+      );
+      const surpriseBtn = document.getElementById("surpriseBtn");
+      const generateFreeform = document.getElementById("generateFreeform");
+      const loadingFreeform = document.getElementById("loadingFreeform");
+
+      const ideas = [
+        "Aliens open a taco truck on Mars",
+        "A dragon goes to the dentist",
+        "A raccoon steals a sandwich",
+        "Robots form a rock band",
+        "A superhero who’s afraid of heights",
+      ];
+
+      freeformStory.addEventListener("input", () => {
+        previewFreeform.textContent = freeformStory.value || "No idea yet";
+        const length = Math.ceil(freeformStory.value.length / 100);
+        previewFreeformLength.textContent = `~${length} pages`;
+      });
+
+      surpriseBtn.addEventListener("click", () => {
+        const idea = ideas[Math.floor(Math.random() * ideas.length)];
+        freeformStory.value = idea;
+        previewFreeform.textContent = idea;
+        previewFreeformLength.textContent = "~1 page";
+      });
+
+      generateFreeform.addEventListener("click", () => {
+        if (!freeformStory.value) {
+          alert("Please enter an idea!");
+          return;
+        }
+        generateFreeform.disabled = true;
+        loadingFreeform.style.display = "block";
+        setTimeout(() => {
+          generateFreeform.disabled = false;
+          loadingFreeform.style.display = "none";
+          window.location.href = "comicreader";
+        }, 3000);
+      });
+
+      // Guided logic
+      const titleInput = document.getElementById("comicTitle");
+      const storyInput = document.getElementById("comicStory");
+      const previewTitle = document.getElementById("previewTitle");
+      const previewStyle = document.getElementById("previewStyle");
+      const previewLength = document.getElementById("previewLength");
+      const generateGuided = document.getElementById("generateGuided");
+      const loadingGuided = document.getElementById("loadingGuided");
+      let currentStyle = "superhero";
+
+      titleInput.addEventListener("input", () => {
+        previewTitle.textContent = titleInput.value || "Untitled Comic";
+      });
+
+      storyInput.addEventListener("input", () => {
+        const length = Math.ceil(storyInput.value.length / 100);
+        previewLength.textContent = `~${length} pages`;
+      });
+
+      function setStyle(btn, style) {
+        document
+          .querySelectorAll(".style-btn")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentStyle = style;
+        previewStyle.textContent = style;
+      }
+
+      generateGuided.addEventListener("click", () => {
+        if (!titleInput.value || !storyInput.value) {
+          alert("Please fill in both title and story!");
+          return;
+        }
+        generateGuided.disabled = true;
+        loadingGuided.style.display = "block";
+        setTimeout(() => {
+          generateGuided.disabled = false;
+          loadingGuided.style.display = "none";
+          window.location.href = "comicreader";
+        }, 3000);
+      });
+    </script>
+  </body>
+</html>
