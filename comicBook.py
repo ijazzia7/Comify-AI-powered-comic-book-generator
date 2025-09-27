@@ -6,18 +6,14 @@ from io import BytesIO
 from tqdm import tqdm
 
 
-os.environ['FAL_KEY'] = ''
+os.environ['FAL_KEY'] = 'abd8d5d0-818f-406e-b212-9f45f6396d41:d3935499c524eedd39be799062757a28'
 url = "https://gpt-4o-mini.p.rapidapi.com/chat/completions"
 f_path = "/Users/ijazulhaq/Downloads/strawberry-muffins/Strawberry Muffins Demo.ttf"
 headers = {
-        "x-rapidapi-key": "",
+        "x-rapidapi-key": "1bf02a2893mshdf19511f9f91ec7p1d360fjsn6c1314c7778b",
         "x-rapidapi-host": "gpt-4o-mini.p.rapidapi.com",
         "Content-Type": "application/json"
     }
-
-
-
-
 
 
 def generate_comic_content(idea):
@@ -448,10 +444,21 @@ def titleBlock(text, page, offset_x, offset_y, max_width):
     page = place_wrapped_text(page,text,rect,font_path=f_path,font_size=37,fill="black",outline="white",outline_width=0,line_spacing=5,padding=10)
     return page, rect
 
+def pagenum(page, page_num, offset_y, font_path=f_path, font_size=40):
+    draw = ImageDraw.Draw(page)
+    font = ImageFont.truetype(font_path, font_size)
+
+    page_width, _ = page.size
+
+    # --- Title (centered) ---
+    tw, th = draw.textbbox((0, 0), page_num, font=font)[2:]  # width, height
+    tx = (page_width - tw) // 2
+    draw.text((tx, offset_y), page_num, font=font, fill="black")
+
+    return page
 
 
-
-def return_pages(texts):
+def return_pages(texts, output_dir):
     occupied = []
 
     f_path = "/Users/ijazulhaq/Downloads/strawberry-muffins/Strawberry Muffins Demo.ttf"
@@ -472,20 +479,20 @@ def return_pages(texts):
 
     # ------------- Page 1------------------------
     # --- LEFT COLUMN: image first, then text ---
-    img = Image.open("/Users/ijazulhaq/Comicbook/static/output_images/image_0.jpg")
+    img = Image.open(f"{output_dir}/image_0.jpg")
     page1, rect_img_left = place_image(page1, img, (0, 0), size=(300, 300))
     page1, rect_text_left = block_and_text(text1, page1, 0, rect_img_left[3] + 20, 300)
     page1 = place_badge(page1, rect_img_left, "1", f_path, radius=22, font_size=20)
 
     # --- RIGHT COLUMN: text first, then image ---
-    img = Image.open("/Users/ijazulhaq/Comicbook/static/output_images/image_1.jpg")
+    img = Image.open(f"{output_dir}/image_1.jpg")
     page1, rect_text_right = block_and_text(text2, page1, 320, 0, 300)
     page1, rect_img_right = place_image(page1, img, (320, rect_text_right[3] + 20), size=(300, 300))
     page1 = place_badge(page1, rect_text_right, "2", f_path, radius=22, font_size=20)
 
     # --- LOWER: image first, then text ---
 
-    img = Image.open("/Users/ijazulhaq/Comicbook/static/output_images/image_2.jpg")
+    img = Image.open(f"{output_dir}/image_2.jpg")
     if rect_img_right[3]> rect_text_left[3]:
         page1, rect_img_low = place_image(page1, img, (0, rect_img_right[3]+ 20), size=(620, 300))
     else:
@@ -497,44 +504,47 @@ def return_pages(texts):
 
     # ------------- Page 2------------------------
     # --- High: image first, then text ---
-    img = Image.open("/Users/ijazulhaq/Comicbook/static/output_images/image_3.jpg")
+    img = Image.open(f"{output_dir}/image_3.jpg")
     page2, rect_text_low = block_and_text(text4, page2, 0, 0, 600)
     page2, rect_img_low = place_image(page2, img, (0, rect_text_low[3]+20), size=(620, 300))
     page2 = place_badge(page2, rect_text_low, "4", f_path, radius=22, font_size=20)
 
     # --- Left COLUMN: text first, then image ---
-    img = Image.open("/Users/ijazulhaq/Comicbook/static/output_images/image_4.jpg")
+    img = Image.open(f"{output_dir}/image_4.jpg")
     page2, rect_text_left = block_and_text(text5, page2, 0, rect_img_low[3]+20, 300)
     page2, rect_img_left = place_image(page2, img, (0, rect_text_left[3] + 20), size=(300, 300))
     page2 = place_badge(page2, rect_text_left, "5", f_path, radius=22, font_size=20)
 
     # --- right COLUMN: image first, then text ---
-    img = Image.open("/Users/ijazulhaq/Comicbook/static/output_images/image_5.jpg")
+    img = Image.open(f"{output_dir}/image_5.jpg")
     page2, rect_img_right = place_image(page2, img, (320, rect_img_low[3]+20), size=(300, 300))
     page2, rect_text_right = block_and_text(text6, page2, 320, rect_img_right[3] + 20, 300)
     page2 = place_badge(page2, rect_img_right, "6", f_path, radius=22, font_size=20)
 
-
     # ------------- Page 3------------------------
     # --- LEFT COLUMN: image first, then text ---
-    img = Image.open("/Users/ijazulhaq/Comicbook/static/output_images/image_6.jpg")
+    img = Image.open(f"{output_dir}/image_6.jpg")
     page3, rect_img_left = place_image(page3, img, (0, 0), size=(300, 300))
     page3, rect_text_left = block_and_text(text7, page3, 0, rect_img_left[3] + 20, 300)
     page3 = place_badge(page3, rect_img_left, "7", f_path, radius=22, font_size=20)
 
     # --- RIGHT COLUMN: text first, then image ---
-    img = Image.open("/Users/ijazulhaq/Comicbook/static/output_images/image_7.jpg")
+    img = Image.open(f"{output_dir}/image_7.jpg")
     page3, rect_text_right = block_and_text(text8, page3, 320, 0, 300)
     page3, rect_img_right = place_image(page3, img, (320, rect_text_right[3] + 20), size=(300, 300))
     page3 = place_badge(page3, rect_text_right, "8", f_path, radius=22, font_size=20)
     
-    page1 = page1.convert('RGB')#.save('/Users/ijazulhaq/Comicbook/static/pages/02.jpg')
-    page2 = page2.convert('RGB')#.save('/Users/ijazulhaq/Comicbook/static/pages/03.jpg')
-    page3 = page3.convert('RGB')#.save('/Users/ijazulhaq/Comicbook/static/pages/04.jpg')
+    
+    page1 = page1.convert('RGB')
+    page2 = page2.convert('RGB')
+    page3 = page3.convert('RGB')
 
     page1 = add_margins(page1, top=90, right=50, bottom=0, left=10, color=(255, 255, 255, 255))
+    page1 = pagenum(page1, '1', 20)
     page2 = add_margins(page2, top=90, right=10, bottom=0, left=50, color=(255, 255, 255, 255))
+    page2 = pagenum(page2, '2', 20)
     page3 = add_margins(page3, top=90, right=50, bottom=0, left=10, color=(255, 255, 255, 255))
+    page3 = pagenum(page3, '3', 20)
 
     page1 = draw_page_border(page1, border_color="black", border_width=2, margin=0)
     page2 = draw_page_border(page2, border_color="black", border_width=2, margin=0)
@@ -546,16 +556,17 @@ def return_pages(texts):
 
         draw_circle(page2, (0,200+i*50), 15, outline="black", outline_width=3, fill='black')
         draw_circle(page2, (0,200+i*50), 10, outline="white", outline_width=3, fill='white')
+        
 
     
     return page1, page2, page3
 
 
-def cover_generation(title, genre):
+def cover_generation(title, genre, cover_path):
     # GENERATING COVER IMAGE
     text = "Level I"
     title_text = title.split(": ")[-1]  # your second title
-    cover = Image.open(f'/Users/ijazulhaq/Comicbook/static/output_images/cover_image.jpg')
+    cover = Image.open(cover_path)
     draw = ImageDraw.Draw(cover)
     font = ImageFont.truetype(f_path, 30)
 
@@ -658,4 +669,4 @@ def cover_generation(title, genre):
     draw.rounded_rectangle(rect5, radius=radius, fill=(205, 125, 100), outline="black", width=3)
     # Draw second text
     draw.text((x5, y5), 'Issued September', font=font, fill="black")
-    cover.convert('RGB').save('static/pages/01.jpg')
+    return cover.convert('RGB')

@@ -1,0 +1,132 @@
+[
+  {
+    "id": "346ebd2d-db9f-4a94-8e9e-ad70c3378830",
+    "title": "Story Title: The Thirsty Crow",
+    "createdAt": 1758411738.375817,
+    "pages": [
+      {
+        "imageUrl": "/static/comics/346ebd2d-db9f-4a94-8e9e-ad70c3378830/pages/01.jpg"
+      },
+      {
+        "imageUrl": "/static/comics/346ebd2d-db9f-4a94-8e9e-ad70c3378830/pages/02.jpg"
+      },
+      {
+        "imageUrl": "/static/comics/346ebd2d-db9f-4a94-8e9e-ad70c3378830/pages/03.jpg"
+      },
+      {
+        "imageUrl": "/static/comics/346ebd2d-db9f-4a94-8e9e-ad70c3378830/pages/04.jpg"
+      },
+      {
+        "imageUrl": "/static/pages/05.jpg"
+      },
+      {
+        "imageUrl": "/static/pages/06.jpg"
+      }
+    ],
+    "genre": "Adventure"
+  },
+  {
+    "id": "0bdfe292-7f9a-42d2-a201-ecfcea46dfb6",
+    "title": "Story Title: New Beginnings",
+    "createdAt": 1758478351.2961469,
+    "pages": [
+      {
+        "imageUrl": "/static/comics/0bdfe292-7f9a-42d2-a201-ecfcea46dfb6/pages/01.jpg"
+      },
+      {
+        "imageUrl": "/static/comics/0bdfe292-7f9a-42d2-a201-ecfcea46dfb6/pages/02.jpg"
+      },
+      {
+        "imageUrl": "/static/comics/0bdfe292-7f9a-42d2-a201-ecfcea46dfb6/pages/03.jpg"
+      },
+      {
+        "imageUrl": "/static/comics/0bdfe292-7f9a-42d2-a201-ecfcea46dfb6/pages/04.jpg"
+      },
+      {
+        "imageUrl": "/static/pages/05.jpg"
+      },
+      {
+        "imageUrl": "/static/pages/06.jpg"
+      }
+    ],
+    "genre": "Slice of Life"
+  },
+  {
+    "id": "f5c2f3a7-f370-465b-b97b-990d9fb150a6",
+    "title": "Story Title: The Brave Ride",
+    "createdAt": 1758478447.2001941,
+    "pages": [
+      {
+        "imageUrl": "/static/comics/f5c2f3a7-f370-465b-b97b-990d9fb150a6/pages/01.jpg"
+      },
+      {
+        "imageUrl": "/static/comics/f5c2f3a7-f370-465b-b97b-990d9fb150a6/pages/02.jpg"
+      },
+      {
+        "imageUrl": "/static/comics/f5c2f3a7-f370-465b-b97b-990d9fb150a6/pages/03.jpg"
+      },
+      {
+        "imageUrl": "/static/comics/f5c2f3a7-f370-465b-b97b-990d9fb150a6/pages/04.jpg"
+      },
+      {
+        "imageUrl": "/static/pages/05.jpg"
+      },
+      {
+        "imageUrl": "/static/pages/06.jpg"
+      }
+    ],
+    "genre": "Adventure"
+  },
+  {
+    "id": "566db594-62c7-43cf-a623-cb29116a0956",
+    "title": "Story Title: The AI Engineer's Dream",
+    "createdAt": 1758478583.3375108,
+    "pages": [
+      {
+        "imageUrl": "/static/comics/566db594-62c7-43cf-a623-cb29116a0956/pages/01.jpg"
+      },
+      {
+        "imageUrl": "/static/comics/566db594-62c7-43cf-a623-cb29116a0956/pages/02.jpg"
+      },
+      {
+        "imageUrl": "/static/comics/566db594-62c7-43cf-a623-cb29116a0956/pages/03.jpg"
+      },
+      {
+        "imageUrl": "/static/comics/566db594-62c7-43cf-a623-cb29116a0956/pages/04.jpg"
+      },
+      {
+        "imageUrl": "/static/pages/05.jpg"
+      },
+      {
+        "imageUrl": "/static/pages/06.jpg"
+      }
+    ],
+    "genre": "Comedy"
+  },
+  {
+    "id": "849b0348-227a-4fe3-87cd-3cc44ad8d007",
+    "title": "Story Title: A Bear-y Special Friendship",
+    "createdAt": 1758478894.8488908,
+    "pages": [
+      {
+        "imageUrl": "/static/comics/849b0348-227a-4fe3-87cd-3cc44ad8d007/pages/01.jpg"
+      },
+      {
+        "imageUrl": "/static/comics/849b0348-227a-4fe3-87cd-3cc44ad8d007/pages/02.jpg"
+      },
+      {
+        "imageUrl": "/static/comics/849b0348-227a-4fe3-87cd-3cc44ad8d007/pages/03.jpg"
+      },
+      {
+        "imageUrl": "/static/comics/849b0348-227a-4fe3-87cd-3cc44ad8d007/pages/04.jpg"
+      },
+      {
+        "imageUrl": "/static/pages/05.jpg"
+      },
+      {
+        "imageUrl": "/static/pages/06.jpg"
+      }
+    ],
+    "genre": "Adventure"
+  }
+]

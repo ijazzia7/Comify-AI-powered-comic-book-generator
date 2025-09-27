@@ -166,7 +166,7 @@
   <body>
     <body>
         <div class="header">
-          <button class="btn-back" onclick="window.location.href='comiclibrary.html'">
+          <button class="btn-back" onclick="window.location.href='comicLibrary'">
             ⬅ Back
           </button>
         <div class='titleandpg'>
@@ -181,14 +181,7 @@
           </div>
         </div>
 
-        <div id="magazine">
-        <div style="background-image: url(static/pages/01.jpg)"></div>
-        <div style="background-image: url(static/pages/02.jpg)"></div>
-        <div style="background-image: url(static/pages/03.jpg)"></div>
-        <div style="background-image: url(static/pages/04.jpg)"></div>
-        <div style="background-image: url(static/pages/05.jpg)"></div>
-        <div style="background-image: url(static/pages/06.jpg)"></div>
-        </div>
+        <div id="magazine"></div>
 
     <div class="zoom-controls">
         <button class="btn-back" onclick="prevPage()">Previous</button>
@@ -200,33 +193,62 @@
     </div>
 
     <script type="text/javascript">
-        let currentPage = 1;      // variable for current page
-      const totalPages = 10;    // variable for total pages
-        const flipbook = $("#magazine");
-
-      $(window).ready(function () {
-        flipbook.turn({
-          display: "double",
-          width: 800,
-          height: 620,
-          acceleration: true,
-          gradients: !$.isTouch,
-          autoCenter: true,
-          duration: 600,
-          elevation: 50,
-          when: {
-            turned: function (e, page) {
-              /*console.log('Current view: ', $(this).turn('view'));*/
+      const comicId = new URLSearchParams(window.location.search).get("id"); 
+      const flipbook = $("#magazine");
+      let currentPage = 1;
+      let totalPages = 0;
+    
+      async function loadComic() {
+        try {
+          // ✅ Fetch comic data from backend
+          const response = await fetch(`/comics/${comicId}`);
+          const comic = await response.json();
+    
+          // ✅ Set title
+          document.getElementById("comicTitle").textContent = comic.title;
+    
+          // ✅ Add pages dynamically
+          comic.pages.forEach((page, index) => {
+            const div = document.createElement("div");
+            div.style.backgroundImage = `url(${page.imageUrl})`;
+            flipbook.append(div);
+          });
+    
+          totalPages = comic.pages.length;
+          updatePageCounter();
+    
+          // ✅ Initialize turn.js
+          flipbook.turn({
+            display: "double",
+            width: 800,
+            height: 620,
+            acceleration: true,
+            gradients: !$.isTouch,
+            autoCenter: true,
+            duration: 600,
+            elevation: 50,
+            when: {
+              turned: function (e, page) {
+                currentPage = page;
+                updatePageCounter();
+              },
             },
-          },
-        });
-      });
-
-      $(window).bind("keydown", function (e) {
-        if (e.keyCode == 37) flipbook.turn("previous");
-        else if (e.keyCode == 39) flipbook.turn("next");
-      });
-
+          });
+        } catch (err) {
+          console.error("Failed to load comic:", err);
+        }
+      }
+    
+      function updatePageCounter() {
+        document.getElementById("pageCounter").textContent =
+          `Page ${currentPage} of ${totalPages}`;
+      }
+    
+      // Navigation
+      function nextPage() { flipbook.turn("next"); }
+      function prevPage() { flipbook.turn("previous"); }
+    
+      // Zoom
       let zoom = 1;
       function zoomIn() {
         zoom = Math.min(zoom + 0.2, 3);
@@ -238,35 +260,21 @@
         flipbook.css("transform", `scale(${zoom})`);
         $("#zoomDisplay").text(`${Math.round(zoom * 100)}%`);
       }
-
+    
       function toggleFullscreen() {
-        if (!document.fullscreenElement)
-          document.documentElement.requestFullscreen();
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen();
         else document.exitFullscreen();
       }
-
-      function nextPage() {
-        flipbook.turn("next");
-        currentPage++;
-        updatePageCounter();
-      }
-      function prevPage() {
-        flipbook.turn("previous");
-        currentPage--;
-        updatePageCounter();
-      }
-      
     
-      function updatePageCounter() {
-        document.getElementById("pageCounter").textContent = 
-          `Page ${currentPage} of ${totalPages}`;
-      }
-
+      // Keyboard shortcuts
       window.addEventListener("keydown", (e) => {
         if (e.key === "ArrowRight") nextPage();
         if (e.key === "ArrowLeft") prevPage();
         if (e.key === "Escape") document.exitFullscreen();
       });
+    
+      // ✅ Load comic on page ready
+      $(window).ready(loadComic);
     </script>
   </body>
 </html>

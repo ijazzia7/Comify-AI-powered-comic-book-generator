@@ -153,11 +153,87 @@
         cursor: not-allowed;
       }
 
-      .loading {
-        text-align: center;
-        font-size: 0.9rem;
-        color: hsl(var(--muted-foreground));
-        margin-top: 10px;
+      /* === LOADING OVERLAY (comic vibe) === */
+      .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+      }
+
+      /* Center box styled like a comic speech bubble */
+      .loading-box {
+        background: hsl(var(--muted));
+        color: hsl(var(--foreground));
+        padding: 28px 36px;
+        border-radius: 18px;
+        display: flex;
+        gap: 18px;
+        align-items: center;
+        box-shadow: var(--panel-shadow), 0 0 18px hsl(var(--primary) / 0.6);
+        border: 3px solid hsl(var(--ring));
+        font-family: "Comic Sans MS", "Chalkboard SE", cursive;
+        animation: popIn 0.3s ease-out;
+        position: relative;
+      }
+
+      /* Bubble "tail" */
+      .loading-box::after {
+        content: "";
+        position: absolute;
+        bottom: -20px;
+        left: 40px;
+        border-width: 20px 15px 0;
+        border-style: solid;
+        border-color: hsl(var(--muted)) transparent transparent transparent;
+        filter: drop-shadow(0 -2px 2px rgba(0, 0, 0, 0.2));
+      }
+
+      /* Spinner (comic yellow + primary accent) */
+      .spinner {
+        width: 42px;
+        height: 42px;
+        border: 5px solid hsl(var(--accent));
+        border-top-color: hsl(var(--primary));
+        border-radius: 50%;
+        animation: spin 0.9s linear infinite;
+        flex-shrink: 0;
+      }
+
+      /* Text with comic punch outline */
+      .loading-text {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: hsl(var(--primary));
+        text-shadow: 2px 2px 0px hsl(var(--background)),
+          -2px -2px 0px hsl(var(--background)), 3px 3px 0px #000;
+        letter-spacing: 0.5px;
+      }
+
+      /* Animations */
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes popIn {
+        0% {
+          transform: scale(0.85);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      .hidden {
+        display: none !important;
       }
     </style>
   </head>
@@ -179,6 +255,16 @@
             ✨ Story Starter
           </button>
           <button id="tabGuided" class="tab-btn">🎨 Story Builder</button>
+        </div>
+
+        <!-- Freeform loading overlay -->
+        <div class="loading-overlay hidden" id="loadingFreeform1">
+          <div class="loading-box">
+            <div class="spinner"></div>
+            <div class="loading-messages">
+              <p class="loading-text" id="loadingText"></p>
+            </div>
+          </div>
         </div>
 
         <!-- Freeform Mode -->
@@ -302,6 +388,12 @@
     </div>
 
     <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const loadingFreeform1 = document.getElementById("loadingFreeform1");
+        if (loadingFreeform1) {
+          loadingFreeform1.classList.add("hidden"); // always hide on fresh load
+        }
+      });
       const tabFreeform = document.getElementById("tabFreeform");
       const tabGuided = document.getElementById("tabGuided");
       const freeformSection = document.getElementById("freeformSection");
@@ -328,7 +420,17 @@
       );
       const surpriseBtn = document.getElementById("surpriseBtn");
       const generateFreeform = document.getElementById("generateFreeform");
-      const loadingFreeform = document.getElementById("loadingFreeform");
+      const loadingFreeform1 = document.getElementById("loadingFreeform1");
+
+      window.addEventListener("pageshow", () => {
+        const loadingFreeform1 = document.getElementById("loadingFreeform1");
+        if (loadingFreeform1) {
+          loadingFreeform1.classList.add("hidden");
+        }
+        if (window.loadingInterval) {
+          clearInterval(window.loadingInterval);
+        }
+      });
 
       const ideas = [
         "Aliens open a taco truck on Mars",
@@ -351,18 +453,66 @@
         previewFreeformLength.textContent = "~1 page";
       });
 
+      const steps = [
+        "Summoning story sparks...",
+        "Sketching panels ✏️",
+        "Splashing colors 🎨",
+        "Adding speech bubbles 💬",
+        "Binding pages 📖",
+        "Almost done... get ready!",
+      ];
+
+      function runLoadingMessages() {
+        const textEl = document.getElementById("loadingText");
+        let i = 0;
+        textEl.textContent = steps[0];
+
+        // clear old intervals if user clicks twice
+        if (window.loadingInterval) {
+          clearInterval(window.loadingInterval);
+        }
+
+        window.loadingInterval = setInterval(() => {
+          i++;
+          if (i < steps.length) {
+            textEl.textContent = steps[i];
+          } else {
+            clearInterval(window.loadingInterval);
+          }
+        }, 2000);
+      }
+
       generateFreeform.addEventListener("click", () => {
-        if (!freeformStory.value) {
+        const idea = freeformStory.value.trim();
+        if (!idea) {
           alert("Please enter an idea!");
           return;
         }
+
         generateFreeform.disabled = true;
-        loadingFreeform.style.display = "block";
-        setTimeout(() => {
-          generateFreeform.disabled = false;
-          loadingFreeform.style.display = "none";
-          window.location.href = "comicreader";
-        }, 3000);
+        loadingFreeform1.classList.remove("hidden"); // show overlay
+        runLoadingMessages();
+
+        fetch("/generate_comic", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ idea }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.error) {
+              alert("Error: " + data.error);
+              return;
+            }
+            window.location.href = `comicreader?id=${data.id}`;
+          })
+          .catch((err) => {
+            console.error("Fetch error:", err);
+            alert("Something went wrong while generating comic!");
+          })
+          .finally(() => {
+            generateFreeform.disabled = false;
+          });
       });
 
       // Guided logic
