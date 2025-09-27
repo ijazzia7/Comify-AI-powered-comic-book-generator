@@ -5,7 +5,10 @@
 
 ---
 
-![Cover placeholder](docs/images/cover.png)
+![Cover placeholder](static/productImages/1.png)
+![Cover placeholder](static/productImages/2.png)
+![Cover placeholder](static/productImages/3.png)
+![Cover placeholder](static/productImages/4.png)
 
 ---
 
@@ -59,10 +62,6 @@ This project provides a **full-stack comic creation workflow**:
 
 ---
 
-## Architecture
-
-![Architecture placeholder](docs/images/architecture.png)
-
 **Main components**
 
 - **Frontend (React/Next.js)** — UI for writing, storyboarding, editing
@@ -81,3 +80,45 @@ This project provides a **full-stack comic creation workflow**:
    Panel 1: A rainy alley, neon signs.
    Dialogue: HERO: "It's too quiet tonight."
    ```
+2. **Storyboard Layout**
+
+   - Choose template (grid, 3-panel, splash, etc.)
+   - Panels are auto-populated with placeholders
+
+3. **Art Generation**
+
+   - Generate images via API or upload your own
+   - Recommended panel size: **700 × 1040 px**
+
+4. **Lettering**
+
+   - Add text balloons with auto-wrap
+   - Control spacing via `TEXT_BLOCK_GAP`
+
+5. **Page Composition & Ads**
+
+   - Compose panels into final pages
+   - Auto-add advertisement page as last page
+
+6. **Export**
+   - PDF (print/web) or CBZ
+   - Includes metadata & TOC
+
+---
+
+## Tech Stack
+
+- **Frontend:** React (Next.js), Tailwind CSS
+- **Backend:** FastAPI (Python) or Express (Node.js)
+- **Database:** PostgreSQL
+- **Workers:** Redis + RQ / Celery
+- **Storage:** Local, Google Cloud Storage, AWS S3
+- **Deployment:** Docker, Kubernetes/Cloud Run
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Python >= 3.9
