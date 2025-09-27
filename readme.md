@@ -5,10 +5,10 @@
 
 ---
 
-![Cover placeholder](static/productImages/1.png)
-![Cover placeholder](static/productImages/2.png)
-![Cover placeholder](static/productImages/3.png)
-![Cover placeholder](static/productImages/4.png)
+![Cover placeholder](/static/productImages/1.png)
+![Cover placeholder](/static/productImages/2.png)
+![Cover placeholder](/static/productImages/3.png)
+![Cover placeholder](/static/productImages/4.png)
 
 ---
 
